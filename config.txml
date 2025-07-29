@@ -1,0 +1,16 @@
+
+<Configuration>
+  <ModelPath>emotion-ferplus-8.onnx</ModelPath>
+  <CascadePath>haarcascade_frontalface_default.xml</CascadePath>
+  <InputSize>64</InputSize>
+  <Emotions>
+    <Emotion>Neutral</Emotion>
+    <Emotion>Happiness</Emotion>
+    <Emotion>Surprise</Emotion>
+    <Emotion>Sadness</Emotion>
+    <Emotion>Anger</Emotion>
+    <Emotion>Disgust</Emotion>
+    <Emotion>Fear</Emotion>
+    <Emotion>Contempt</Emotion>
+  </Emotions>
+</Configuration>

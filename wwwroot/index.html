@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attention Detector Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .container {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            grid-gap: 2em;
+            max-width: 420px;
+            margin: 4em auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2em;
+        }
+        h1 {
+            text-align: center;
+            color: #2a5298;
+            margin-bottom: 0.5em;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 1em;
+        }
+        input[type="file"] {
+            padding: 0.5em;
+        }
+        button {
+            background: #2a5298;
+            color: #fff;
+            border: none;
+            padding: 0.75em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background: #1e3c72;
+        }
+        #result {
+            margin-top: 1em;
+            font-weight: bold;
+            text-align: center;
+            color: #1e3c72;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Attention Detector Demo</h1>
+        <form id="uploadForm">
+            <input type="file" name="image" accept="image/*" required />
+            <button type="submit">Check Attention</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/attention/attention', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = 
+                response.ok ? (data.Attentive ? "Person is attentive!" : "Person is not attentive.") 
+                            : "Error: " + (data.message || "Unknown error");
+        };
+    </script>
+</body>
