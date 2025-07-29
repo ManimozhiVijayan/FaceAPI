@@ -53,17 +53,131 @@
             text-align: center;
             color: #1e3c72;
         }
+        @media (max-width: 600px) {
+            .container {
+                max-width: 98vw;
+                margin: 1em auto;
+                padding: 1em;
+                grid-gap: 1em;
+            }
+            h1 {
+                font-size: 1.4em;
+            }
+            button {
+                font-size: 1em;
+                padding: 0.6em;
+            }
+            input[type="file"] {
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1em;
+            }
+            .container {
+                padding: 0.5em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Attention Detector Demo</h1>
+        <div class="hero">
+            <img src="/images/classroom-kids.jpg" alt="Kids listening in classroom" class="hero-img">
+            <div class="hero-text">
+                <h1><span class="icon">&#128161;</span> Attention Detector Demo</h1>
+                <p class="subtitle">Empowering classrooms with AI-powered attention detection.<br>Upload a face image to see if the person is attentive!</p>
+            </div>
+        </div>
         <form id="uploadForm">
-            <input type="file" name="image" accept="image/*" required />
-            <button type="submit">Check Attention</button>
+            <label for="image" class="upload-label"><span class="icon">&#128247;</span> Choose a face image</label>
+            <input type="file" id="image" name="image" accept="image/*" required />
+            <button type="submit"><span class="icon">&#128640;</span> Check Attention</button>
         </form>
         <div id="result"></div>
     </div>
+    <style>
+        /* Demo badge for mobile */
+        .demo-badge {
+            position: fixed;
+            top: 0.5em;
+            right: 0.5em;
+            background: #2a5298;
+            color: #fff;
+            padding: 0.4em 1em;
+            border-radius: 8px;
+            font-size: 0.9em;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        @media (max-width: 600px) {
+            .demo-badge {
+                font-size: 0.8em;
+                padding: 0.3em 0.7em;
+            }
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5em;
+        }
+        .hero-img {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(42,82,152,0.12);
+            margin-bottom: 1em;
+        }
+        .hero-text {
+            text-align: center;
+        }
+        .hero h1 {
+            color: #2a5298;
+            font-size: 2em;
+            margin-bottom: 0.3em;
+            font-weight: 700;
+        }
+        .icon {
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+        .subtitle {
+            color: #1e3c72;
+            font-size: 1.1em;
+            margin-bottom: 0.5em;
+        }
+        .upload-label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: #2a5298;
+            font-weight: 600;
+            font-size: 1em;
+        }
+        input[type="file"] {
+            padding: 0.5em;
+            border: 1px solid #2a5298;
+            border-radius: 8px;
+            background: #f4f8fb;
+        }
+        button {
+            background: linear-gradient(90deg, #2a5298 0%, #1e3c72 100%);
+            color: #fff;
+            border: none;
+            padding: 0.85em 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(42,82,152,0.08);
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+        }
+    </style>
+    <div class="demo-badge">Demo</div>
     <script>
         document.getElementById('uploadForm').onsubmit = async function(e) {
             e.preventDefault();
@@ -73,8 +187,13 @@
                 body: formData
             });
             const data = await response.json();
+            // Debug: log full response
+            console.log('API response:', data);
+            if (!response.ok) {
+                console.error('API error:', data);
+            }
             document.getElementById('result').textContent = 
-                response.ok ? (data.Attentive ? "Person is attentive!" : "Person is not attentive.") 
+                response.ok ? ((data.Attentive ?? data.attentive) ? "Person is attentive!" : "Person is not attentive.") 
                             : "Error: " + (data.message || "Unknown error");
         };
     </script>
